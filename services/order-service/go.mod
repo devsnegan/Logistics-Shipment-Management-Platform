@@ -1,3 +1,5 @@
 module github.com/devsnegan/logistics-platform/order-service
 
 go 1.25.2
+
+require github.com/lib/pq v1.12.3
