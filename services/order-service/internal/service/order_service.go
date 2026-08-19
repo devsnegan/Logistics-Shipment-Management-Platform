@@ -18,3 +18,8 @@ func NewOrderService(repo *repository.OrderRepository) *OrderService {
 func (s *OrderService) CreateOrder(order *model.Order) (*model.Order, error) {
 	return s.repo.CreateOrder(order)
 }
+
+func (s *OrderService) GetOrders() ([]*model.Order, error) {
+	return s.repo.GetOrders()
+}
+

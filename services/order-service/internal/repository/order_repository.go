@@ -43,3 +43,47 @@ func (r *OrderRepository) CreateOrder(order *model.Order) (*model.Order, error) 
 
 	return order, nil
 }
+
+func (r *OrderRepository) GetOrders() ([]*model.Order, error) {
+	query := `
+		SELECT
+			id,
+			customer_name,
+			pickup_location,
+			delivery_location,
+			created_at
+		FROM orders
+		ORDER BY id
+	`
+
+	rows, err := r.db.Query(query)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var orders []*model.Order
+
+	for rows.Next() {
+		var order model.Order
+
+		err := rows.Scan(
+			&order.ID,
+			&order.CustomerName,
+			&order.PickupLocation,
+			&order.DeliveryLocation,
+			&order.CreatedAt,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		orders = append(orders, &order)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+
+	return orders, nil
+}

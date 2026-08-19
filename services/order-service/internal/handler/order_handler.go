@@ -38,3 +38,15 @@ func (h *OrderHandler) CreateOrder(w http.ResponseWriter, r *http.Request) {
 
 	json.NewEncoder(w).Encode(createdOrder)
 }
+
+func (h *OrderHandler) GetOrders(w http.ResponseWriter, r *http.Request) {
+	orders, err := h.service.GetOrders()
+	if err != nil {
+		http.Error(w, "Failed to get orders", http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("Content-Type", "application/json")
+
+	json.NewEncoder(w).Encode(orders)
+}

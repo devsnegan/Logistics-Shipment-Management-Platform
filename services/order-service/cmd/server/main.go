@@ -30,10 +30,18 @@ func main() {
 
 	// Create handler
 	orderHandler := handler.NewOrderHandler(orderService)
+http.HandleFunc("/orders", func(w http.ResponseWriter, r *http.Request) {
+	switch r.Method {
+	case http.MethodPost:
+		orderHandler.CreateOrder(w, r)
 
-	// Register routes
-	http.HandleFunc("/orders", orderHandler.CreateOrder)
+	case http.MethodGet:
+		orderHandler.GetOrders(w, r)
 
+	default:
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+	}
+})
 	fmt.Println("Order service running on :8080")
 
 	log.Fatal(http.ListenAndServe(":8080", nil))
